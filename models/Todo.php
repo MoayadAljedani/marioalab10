@@ -41,16 +41,16 @@ class Todo {
     public function setDone($done) {
         $this->done = $done;
     }
-public function create( ){
-$query= "INSERT INTO ".$this->dbTable."(task, dateAdded, done) VALUES(:taskName,now(),false);";
-$stmt= $this->dbConnection->prepare($query);
-$stmt->bindParm(":taskName",$this->task);
- if($stmt->execute()){
-    return true;
- }
-printf("Error :%s ", $stmt->error);
-return false;
-}
+    public function create() {
+        $query = "INSERT INTO " . $this->dbTable . " (task, date_added, done) VALUES (:taskName, NOW(), false);";
+        $stmt = $this->dbConnection->prepare($query);
+        $stmt->bindParam(":taskName", $this->task);
+        if ($stmt->execute()) {
+            return true;
+        }
+        printf("Error: %s ", $stmt->error);
+        return false;
+    }
 public function readOne() {
     $query = "SELECT * FROM " . $this->dbTable . " WHERE id=:id";
     $stmt = $this->dbConnection->prepare($query);
@@ -69,10 +69,10 @@ public function readOne() {
 public function readAll() {
     $query = "SELECT * FROM " . $this->dbTable . " WHERE done = false";
     $stmt = $this->dbConnection->prepare($query);
-    if ($stmt->execute() && $stmt->rowCount() == 1) {
-        return true;
+    if ($stmt->execute() && $stmt->rowCount() >0) {
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
-    return false;
+    return [];
 }
 
 public function update() {
